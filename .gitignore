@@ -1,0 +1,70 @@
+# ==========================================
+# Project Specific (Boot.dev Gator CLI)
+# ==========================================
+gator
+.gatorconfig.json
+config.json
+
+# ==========================================
+# Go Binaries, Test & Build Artifacts
+# ==========================================
+bin/
+dist/
+build/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+coverage.txt
+coverage.html
+profile.cov
+
+# Go workspace files
+go.work
+go.work.sum
+
+# ==========================================
+# Environment & Secrets
+# ==========================================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ==========================================
+# Database & Local Storage
+# ==========================================
+pgdata/
+postgres-data/
+*.db
+*.sqlite
+*.sqlite3
+*.dump
+
+# ==========================================
+# IDEs & Editors
+# ==========================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.iml
+
+# ==========================================
+# OS & Linux (Kubuntu / KDE) Files
+# ==========================================
+.directory
+.DS_Store
+Thumbs.db
+
+# ==========================================
+# Logs & Temporary Debugging
+# ==========================================
+*.log
+tmp/
+temp/
