@@ -3,15 +3,43 @@ package main
 import (
 	"blogAggregator/internal/config"
 	"fmt"
+	"os"
 )
 
+type state struct {
+	cfg *config.Config
+}
+
 func main() {
-	config, err := config.Read()
+	configData, err := config.Read()
 	if err != nil {
 		fmt.Println(err)
 	}
-	// fmt.Println(config.CurrentUsername)
-	config.SetUser("Shreyansh")
-	fmt.Println(config.DB_Url)
-	fmt.Println(config.CurrentUsername)
+
+	userArgs := os.Args[1:]
+	if len(userArgs) < 2 {
+		fmt.Println("not enough arguments!")
+		os.Exit(1)
+	}
+	// fmt.Println(userArgs)
+
+	userCmds := command{
+		name:      userArgs[0],
+		arguments: userArgs[1:],
+	}
+
+	programState := state{
+		cfg: &configData,
+	}
+
+	commands := commands{
+		commandsMap: map[string]func(*state, command) error{
+			"login": handlerLogin,
+		},
+	}
+
+	commands.run(&programState, userCmds)
+
+	os.Exit(0)
+
 }

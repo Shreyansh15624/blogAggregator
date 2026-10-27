@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 )
 
+// Exists just to represent the config data
 type Config struct {
 	DB_Url          string `json:"db_url"`
 	CurrentUsername string `json:"current_user_name"`
