@@ -2,11 +2,16 @@ package main
 
 import (
 	"blogAggregator/internal/config"
+	"blogAggregator/internal/database"
+	"database/sql"
 	"fmt"
 	"os"
+
+	_ "github.com/lib/pq"
 )
 
 type state struct {
+	db  *database.Queries
 	cfg *config.Config
 }
 
@@ -28,17 +33,28 @@ func main() {
 		arguments: userArgs[1:],
 	}
 
+	db, err := sql.Open("postgres", configData.DB_Url)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	dbQueries := database.New(db)
 	programState := state{
+		db:  dbQueries,
 		cfg: &configData,
 	}
 
 	commands := commands{
 		commandsMap: map[string]func(*state, command) error{
-			"login": handlerLogin,
+			"login":    handlerLogin,
+			"register": handlerRegister,
 		},
 	}
 
-	commands.run(&programState, userCmds)
+	err = commands.run(&programState, userCmds)
+	if err != nil {
+		fmt.Println("there has been an error:\n", err)
+	}
 
 	os.Exit(0)
 
