@@ -14,7 +14,6 @@ type commands struct {
 func (c *commands) run(s *state, cmd command) error {
 	handler, ok := c.commandsMap[cmd.name]
 	if !ok {
-		c.register(cmd.name, c.commandsMap[cmd.name])
 		return nil
 	}
 
