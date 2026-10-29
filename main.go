@@ -22,10 +22,6 @@ func main() {
 	}
 
 	userArgs := os.Args[1:]
-	if len(userArgs) < 2 {
-		fmt.Println("not enough arguments!")
-		os.Exit(1)
-	}
 	// fmt.Println(userArgs)
 
 	userCmds := command{
@@ -48,12 +44,14 @@ func main() {
 		commandsMap: map[string]func(*state, command) error{
 			"login":    handlerLogin,
 			"register": handlerRegister,
+			"reset":    handlerReset,
 		},
 	}
 
 	err = commands.run(&programState, userCmds)
 	if err != nil {
 		fmt.Println("there has been an error:\n", err)
+		os.Exit(1)
 	}
 
 	os.Exit(0)

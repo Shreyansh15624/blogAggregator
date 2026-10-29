@@ -5,7 +5,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"os"
 	"time"
 
 	"github.com/google/uuid"
@@ -17,8 +16,7 @@ func handlerLogin(s *state, cmd command) error {
 	}
 
 	if cmd.arguments[0] == "unknown" {
-		fmt.Println("rejected login for user with name 'unknown'")
-		os.Exit(1)
+		return errors.New("rejected login for user with name 'unknown'")
 	}
 
 	_, err := s.db.GetUser(context.Background(), cmd.arguments[0])
@@ -66,9 +64,20 @@ func handlerRegister(s *state, cmd command) error {
 			return err
 		}
 	} else {
-		fmt.Println("a user with this username already exists in the database.\ndetails:")
-		fmt.Printf("ID: %s\nCreated on: %v\nUpdated on: %v\nName: %v\n", userInDB.ID.String(), userInDB.CreatedAt, userInDB.UpdatedAt, userInDB.Name)
-		os.Exit(1)
+		// fmt.Println("a user with this username already exists in the database.\ndetails:")
+		// fmt.Printf("ID: %s\nCreated on: %v\nUpdated on: %v\nName: %v\n", userInDB.ID.String(), userInDB.CreatedAt, userInDB.UpdatedAt, userInDB.Name)
+		return errors.New("a user with this username already exists in the database!")
+	}
+	return nil
+}
+
+func handlerReset(s *state, cmd command) error {
+	if len(cmd.arguments) > 0 {
+		return errors.New("the reset command shouldn't have any arguements!")
+	}
+	err := s.db.ResetUsers(context.Background())
+	if err != nil {
+		return err
 	}
 	return nil
 }
