@@ -1,6 +1,7 @@
 package main
 
 import (
+	"blogAggregator/internal/config"
 	"blogAggregator/internal/database"
 	"context"
 	"errors"
@@ -73,11 +74,33 @@ func handlerRegister(s *state, cmd command) error {
 
 func handlerReset(s *state, cmd command) error {
 	if len(cmd.arguments) > 0 {
-		return errors.New("the reset command shouldn't have any arguements!")
+		return errors.New("the 'reset' command shouldn't have any arguements!")
 	}
 	err := s.db.ResetUsers(context.Background())
 	if err != nil {
 		return err
+	}
+	return nil
+}
+
+func handlerUsers(s *state, cmd command) error {
+	if len(cmd.arguments) > 0 {
+		return errors.New("the 'users' command shoudln't have any arguements!")
+	}
+	users, err := s.db.GetUsers(context.Background())
+	if err != nil {
+		return err
+	}
+	gatorConfig, err := config.Read()
+	if err != nil {
+		return err
+	}
+	for _, name := range users {
+		if name != gatorConfig.CurrentUsername {
+			fmt.Println(name)
+		} else {
+			fmt.Println(name, "(current)")
+		}
 	}
 	return nil
 }
